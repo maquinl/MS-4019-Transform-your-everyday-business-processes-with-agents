@@ -1,27 +1,27 @@
 ---
-title: Exercise Instructions
+title: Online Hosted Instructions
 permalink: index.html
 layout: home
 ---
 
-<!--
-Change the title above AND IN THE _config.yml FILE (so that the page header in the GitHub Pages site automatically shows the site name).
+This page lists exercises associated with Microsoft skilling content on [Microsoft Learn](https://learn.microsoft.com/en-us/training/courses/ms-4019)
 
-When you're ready for the labs to be live - make the repo public and enable GitHub Pages publishing from the main branch (in the repo Settings | Pages).
--->
+<hr>
 
-This page lists exercises associated with Microsoft skilling content on [Microsoft Learn](https://learn.microsoft.com)
+{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" | where_exp:"page", "page.lab.title" | sort: "url" -%}
+{% assign current_module = "" -%}
+{% for activity in labs -%}
+{% assign relative_url = activity.url | remove: "/Instructions/Labs/" -%}
+{% assign module_folder = relative_url | split: "/" | first -%}
 
-<!-- You can edit the paragraph above to provide a more specific description and links to content on Learn.
+{% if module_folder != current_module -%}
+{% assign current_module = module_folder -%}
 
-Include the following note if an Azure subscription is required (or add something similar for any other requirements, such as a Microsoft 365 account).
+### {{ module_folder }}
 
-> **Note**: To complete these exercises, you will need a [Microsoft Azure subscription](https://azure.microsoft.com/free) in which you have sufficient permissions to create and configure the required resources.
+| Lab | Level | Duration |
+| --- | --- | --- |
+{% endif -%}
 
-If a more complex setup is required, create a separate markdown file with setup instructions at \Instructions\Labs\00-setup.md - being sure to include "lab.title"" metadata at the top so it shows up the list below
--->
-
-{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" %}
-{% for activity in labs  %}
-- [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }})
+| [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }}) | {{ activity.lab.level }} | {{ activity.lab.duration }} |
 {% endfor %}
